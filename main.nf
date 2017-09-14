@@ -1,6 +1,6 @@
 #!/usr/bin/env nextflow
 
-params.reads = 'data/subset.fasta'
+params.reads = ''
 
 // choose the assembler
 params.assembler = 'miniasm'
