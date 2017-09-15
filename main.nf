@@ -79,3 +79,18 @@ process consensus {
     echo \"Consensus was already performed by canu\"
     """
 }
+
+process annotation {
+       container 'hadrieng/prokka'
+       publishDir 'results'
+
+    input:
+        file input from assembly_consensus
+
+    output:
+        file "prokka/${input}.gff" into annotation_gff
+
+    """
+    prokka --outdir prokka --prefix ${input.baseName} --kingdom Bacteria $input
+    """
+}
