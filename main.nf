@@ -1,6 +1,8 @@
 #!/usr/bin/env nextflow
 
 params.reads = ''
+params.genome_size = ''
+
 params.workingdir = 'results'
 
 // choose the assembler
@@ -32,12 +34,13 @@ process adapter_trimming {
 trimmed_reads.into { trimmed_for_assembly; trimmed_for_consensus }
 
 process assembly {
-    publishDir 'results'
-    container 'hadrieng/miniasm'
+    publishDir params.workingdir, mode: 'copy', pattern: "assembly.fasta"
+    container {params.assembler == 'miniasm' ? 'hadrieng/miniasm' : 'hadrieng/canu'}
     cpus 2
 
     input:
         file reads from trimmed_for_assembly
+        val genome_size from params.genome_size
     output:
         file 'assembly.fasta' into assembly
 
@@ -53,7 +56,10 @@ process assembly {
         """
     else if(params.assembler == 'canu')
         """
-        echo TODO
+        canu -p assembly -d canu_out \
+            genomeSize="${genome_size}" -nanopore-raw "${reads}" \
+            maxThreads="${task.cpus}" useGrid=false gnuplotTested=true
+        mv canu_out/assembly.contigs.fasta assembly.fasta
         """
 }
 
