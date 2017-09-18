@@ -53,6 +53,7 @@ process assembly {
         canu -p assembly -d canu_out \
             genomeSize="${genome_size}" -nanopore-raw "${reads}" \
             maxThreads="${task.cpus}" useGrid=false gnuplotTested=true
+        mv canu_out/assembly.contigs.fasta assembly.fasta
         """
 }
 
