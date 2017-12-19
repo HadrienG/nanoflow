@@ -7,14 +7,16 @@ params.workingdir = 'results'
 
 // choose the assembler
 params.assembler = 'miniasm'
-if (params.assembler != 'miniasm' && params.assembler != 'canu'){
+if (params.assembler != 'miniasm' && params.assembler != 'canu') {
     exit 1, "Error --assembler: ${params.assembler}. \
     Should be 'miniasm' or 'canu'"
 }
-params.consensus = ''
+// requires genome_size for canu
+if (params.assembler == 'canu' && params.genome_size == '') {
+    exit 1, "Error --genome_size is a required paramater for canu"
+}
 
 process adapter_trimming {
-
     input:
 	file(reads) from Channel.value( file(params.reads) )
 
@@ -23,20 +25,18 @@ process adapter_trimming {
 
 	script:
     """
-	echo ${task.cpus} ${task.memory} ${task.jobName}
+	echo ${task.cpus} ${task.memory}
 	#Adapters are trimmed with porechop
 	porechop -i $reads -t ${task.cpus} -o trimmed.fastq
     """
 }
 
-// Trimmed reads are used by both 'assembly' and 'consensus', 
+// Trimmed reads are used by both 'assembly' and 'consensus',
 // channel trimmed_reads is duplicated
 trimmed_reads.into { trimmed_for_assembly; trimmed_for_consensus }
 
 process assembly {
     publishDir params.workingdir, mode: 'copy', pattern: "assembly.fasta"
-    container {params.assembler == 'miniasm' ? 'hadrieng/miniasm' : 'hadrieng/canu'}
-    cpus 2
 
     input:
         file reads from trimmed_for_assembly
@@ -47,12 +47,9 @@ process assembly {
     script:
     if(params.assembler == 'miniasm')
         """
-        minimap2 -x ava-ont -t "${task.cpus}" "${reads}" "${reads}" | \
-        gzip -1 > "${reads}.paf.gz"
-        miniasm -f "${reads}" "${reads}.paf.gz" > \
-        "${reads}.gfa"
-        awk '/^S/{print ">"\$2"\\n"\$3}' "${reads}.gfa" | \
-        fold > assembly.fasta
+        minimap2 -x ava-ont -t "${task.cpus}" "${reads}" "${reads}" > "${reads}.paf"
+        miniasm -f "${reads}" "${reads}.paf" > "${reads}.gfa"
+        awk '/^S/{print ">"\$2"\\n"\$3}' "${reads}.gfa" | fold > assembly.fasta
         """
     else if(params.assembler == 'canu')
         """
@@ -66,7 +63,7 @@ process assembly {
 
 process consensus {
 	publishDir params.workingdir, mode: 'copy', pattern: "assembly_consensus.fasta"
-	
+
     input:
 	file(reads) from trimmed_for_consensus
 	file(assembly) from assembly
@@ -77,11 +74,12 @@ process consensus {
 	script:
 	if(params.assembler == 'miniasm')
     """
-	minimap -x map10k -t ${task.cpus} ${assembly} ${reads} assembly.paf
-	racon -t ${task.cpus} ${reads} assembly.paf $assembly assembly_consensus.fasta	
+	minimap2 -x map-ont -t ${task.cpus} ${assembly} ${reads} > assembly.paf
+	racon -t ${task.cpus} ${reads} assembly.paf ${assembly} assembly_consensus.fasta
 	"""
     else if(params.assembler == 'canu')
     """
     echo \"Consensus was already performed by canu\"
+    cp ${assembly} assembly_consensus.fasta
     """
 }
