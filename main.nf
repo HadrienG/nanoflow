@@ -87,7 +87,7 @@ process consensus {
 
 
 process polishing {
-    publishDir params.workingdir, mode: 'copy', pattern: "polished_genome.fasta"
+    publishDir params.workingdir, mode: 'copy', pattern: "polished_genome.fa"
 
     input:
     file(assembly) from assembly_consensus
@@ -95,7 +95,7 @@ process polishing {
     val(fast5_dir) from params.fast5
 
     output:
-    file 'polished_genome.fasta' into assembly_polished
+    file 'polished_genome.fa' into assembly_polished
 
     script:
     if (params.fast5 != '')
@@ -114,6 +114,6 @@ process polishing {
     else
     """
     echo polishing requires raw fast5 data
-    cp ${assembly} polished_genome.fasta
+    cp ${assembly} polished_genome.fa
     """
 }
