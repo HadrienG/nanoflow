@@ -10,8 +10,8 @@ Nanoflow is a work in progress. At the moment it offers:
 - [x] adapter trimming using porechop
 - [x] assembly using miniasm
 - [x] assembly using canu
-- [x] consensus
-- [ ] polishing
+- [x] consensus using racon (or canu)
+- [x] polishing
 - [ ] annotation
 
 ## Installation
