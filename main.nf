@@ -1,5 +1,6 @@
 #!/usr/bin/env nextflow
 
+params.fast5 = ''
 params.reads = ''
 params.genome_size = ''
 
@@ -18,7 +19,7 @@ if (params.assembler == 'canu' && params.genome_size == '') {
 
 process adapter_trimming {
     input:
-	file(reads) from Channel.value( file(params.reads) )
+	file(reads) from file(params.reads)
 
     output:
 	file("trimmed.fastq") into trimmed_reads
@@ -81,5 +82,38 @@ process consensus {
     """
     echo \"Consensus was already performed by canu\"
     cp ${assembly} assembly_consensus.fasta
+    """
+}
+
+
+process polishing {
+    publishDir params.workingdir, mode: 'copy', pattern: "polished_genome.fa"
+
+    input:
+    file(assembly) from assembly_consensus
+    file(reads) from file(params.reads)
+    val(fast5_dir) from params.fast5
+
+    output:
+    file 'polished_genome.fa' into assembly_polished
+
+    script:
+    if (params.fast5 != '')
+    """
+    nanopolish index -d ${fast5_dir} ${reads}
+    bwa index ${assembly}
+    bwa mem -x ont2d -t ${task.cpus} ${assembly} ${reads} | \
+        samtools sort -o reads.sorted.bam -T reads.tmp -
+    samtools index reads.sorted.bam
+    nanopolish_makerange.py ${assembly} | parallel --results \
+        nanopolish.results -P ${task.cpus} nanopolish variants --consensus \
+        polished.{1}.fa -w {1} -r ${reads} -b reads.sorted.bam -g \
+        ${assembly} -t 1 --min-candidate-frequency 0.1
+    nanopolish_merge.py polished.*.fa > polished_genome.fa
+    """
+    else
+    """
+    echo polishing requires raw fast5 data
+    cp ${assembly} polished_genome.fa
     """
 }
