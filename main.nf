@@ -4,17 +4,26 @@ params.fast5 = ''
 params.reads = ''
 params.genome_size = ''
 
-params.output = 'results'
+params.output = ''
 
 // choose the assembler
-params.assembler = 'miniasm'
-if (params.assembler != 'miniasm' && params.assembler != 'canu') {
-    exit 1, "Error --assembler: ${params.assembler}. \
-    Should be 'miniasm' or 'canu'"
+params.assembler = ''
+if (params.assembler != 'miniasm' && params.assembler != 'canu' \
+    && params.assembler != 'unicycler') {
+        exit 1, "--assembler: ${params.assembler}. \
+        Should be 'miniasm', 'canu' or 'unicycler'"
 }
-// requires genome_size for canu
+// requires --genome_size for canu
 if (params.assembler == 'canu' && params.genome_size == '') {
-    exit 1, 'Error --genome_size is a required paramater for canu'
+    exit 1, '--genome_size is a required paramater for canu'
+}
+// requires --output
+if (params.output == '') {
+    exit 1, "--output is a required parameter"
+}
+//requires --reads
+if (params.reads == '') {
+    exit 1, "--reads is a required parameter"
 }
 
 process adapter_trimming {
@@ -39,7 +48,9 @@ process assembly {
 
     input:
         file reads from trimmed_for_assembly
-        val genome_size from params.genome_size
+        if (params.assembler == 'canu') {
+            val genome_size from params.genome_size
+            }
     output:
         file 'assembly.fasta' into assembly
 
@@ -56,6 +67,11 @@ process assembly {
             genomeSize="${genome_size}" -nanopore-raw "${reads}" \
             maxThreads="${task.cpus}" useGrid=false gnuplotTested=true
         mv canu_out/assembly.contigs.fasta assembly.fasta
+        """
+    else if(params.assembler == 'unicycler')
+        """
+        unicycler -l "${reads}" -o unicycler_out
+        mv unicycler_out/assembly.fasta assembly.fasta
         """
 }
 
@@ -77,9 +93,9 @@ process consensus {
     	minimap2 -x map-ont -t "${task.cpus}" "${assembly}" "${reads}" > assembly.paf
     	racon -t "${task.cpus}" "${reads}" assembly.paf "${assembly}" assembly_consensus.fasta
     	"""
-    else if(params.assembler == 'canu')
+    else if(params.assembler == 'canu' || params.assembler == 'unicycler')
         """
-        echo "[info] consensus was already performed by canu. Skipping."
+        echo "[info] consensus was already performed by canu|unicycler. Skipping."
         cp "${assembly}" assembly_consensus.fasta
         """
 }
@@ -87,7 +103,8 @@ process consensus {
 
 process polishing {
     publishDir params.output, mode: 'copy', pattern: 'polished_genome.fa'
-    echo true
+    if (params.fast5 == '')
+        echo true
 
     input:
         file(assembly) from assembly_consensus

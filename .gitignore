@@ -11,3 +11,4 @@ data/
 .nextflow.history
 work/
 results/
+*html
