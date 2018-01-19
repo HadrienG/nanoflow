@@ -20,7 +20,7 @@ To install nextflow (make sure you have java installed):
 curl -fsSL get.nextflow.io | bash
 ```
 
-You'll also need docker installed.
+You'll also need docker installed if you wish to run the pipeline locally.
 
 ## Usage
 
@@ -52,6 +52,15 @@ nextflow run hadrieng/nanoflow --reads reads.fasta --assembler unicycler --outpu
 #### --genome_size
 * genome size of the organism you are trying to assemble
 * required if `--assembler canu`
+
+### profiles
+
+By default nanoflow will execute on your local nachine using dockers.
+You can modify this behavior with the `-profile` option
+
+Existing profiles:
+
+* `planet`: to execute it on the SGBC cluster
 
 ## License
 
