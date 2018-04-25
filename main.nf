@@ -5,6 +5,7 @@ params.reads = ''
 params.genome_size = ''
 
 params.output = ''
+params.cpus = 4
 
 // choose the assembler
 params.assembler = ''

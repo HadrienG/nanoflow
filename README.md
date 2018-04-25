@@ -1,6 +1,6 @@
 # Nanoflow
 
-[![Build Status](https://img.shields.io/travis/HadrienG/nanoflow/master.svg?style=flat-square)](https://travis-ci.org/HadrienG/nanoflow)
+[![build-status](https://img.shields.io/travis/HadrienG/nanoflow/master.svg?style=flat-square)](https://travis-ci.org/HadrienG/nanoflow)
 [![made-with-nextflow](https://img.shields.io/badge/made%20with-nextflow-green.svg?longCache=true&style=flat-square)](https://www.nextflow.io/)
 [![gpl](https://img.shields.io/badge/license-GPL--3.0-lightgrey.svg?style=flat-square)](LICENSE)
 
@@ -35,6 +35,10 @@ nextflow run hadrieng/nanoflow --reads reads.fasta --assembler unicycler --outpu
 ```
 
 ### Options
+
+#### --cpus
+* number of cpus
+* 4 by default
 
 #### --assembler
 * which assembler to use
