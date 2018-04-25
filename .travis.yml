@@ -1,0 +1,23 @@
+sudo: required
+
+language: java
+jdk: openjdk8
+
+services:
+    - docker
+
+install:
+    - sudo bash test/install.sh
+    - cd ${TRAVIS_BUILD_DIR}/test/
+
+script:
+    - sudo bash test_unicycler.sh
+    # - sudo bash test_miniasm.sh
+    # - sudo bash test_canu.sh
+    # - sudo bash test_polishing.sh
+
+after_failure:
+    - cat .nextflow.log
+
+notifications:
+    email: false
