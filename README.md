@@ -1,5 +1,9 @@
 # Nanoflow
 
+[![Build Status](https://img.shields.io/travis/HadrienG/nanoflow/master.svg?style=flat-square)](https://travis-ci.org/HadrienG/nanoflow)
+[![made-with-nextflow](https://img.shields.io/badge/made%20with-nextflow-green.svg?longCache=true&style=flat-square)](https://www.nextflow.io/)
+[![gpl](https://img.shields.io/badge/license-GPL--3.0-lightgrey.svg?style=flat-square)](LICENSE)
+
 ## Introduction
 
 Nanoflow aims at being a reproducible pipeline for bacterial genome assembly
