@@ -40,6 +40,11 @@ nextflow run hadrieng/nanoflow --reads reads.fasta --assembler unicycler --outpu
 * number of cpus
 * 4 by default
 
+#### --mem
+* amount of memory to use, in GB
+* 8GB by default
+* has to end with "GB"
+
 #### --assembler
 * which assembler to use
 * can be miniasm, unicycler or canu

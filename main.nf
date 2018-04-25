@@ -6,6 +6,7 @@ params.genome_size = ''
 
 params.output = ''
 params.cpus = 4
+params.mem = "8GB"
 
 // choose the assembler
 params.assembler = ''
