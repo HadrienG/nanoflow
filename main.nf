@@ -93,7 +93,7 @@ process consensus {
 	if(params.assembler == 'miniasm')
         """
     	minimap2 -x map-ont -t "${task.cpus}" "${assembly}" "${reads}" > assembly.paf
-    	racon -t "${task.cpus}" "${reads}" assembly.paf "${assembly}" assembly_consensus.fasta
+    	racon -t "${task.cpus}" "${reads}" assembly.paf "${assembly}" > assembly_consensus.fasta
     	"""
     else if(params.assembler == 'canu' || params.assembler == 'unicycler')
         """
