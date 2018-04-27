@@ -11,10 +11,13 @@ of nanopore reads.
 
 Nanoflow uses the following software
 
-- adapter trimming using [porechop](https://github.com/rrwick/Porechop) version 0.2.3
-- [x] assembly using [miniasm](https://github.com/lh3/miniasm), [canu](https://github.com/marbl/canu) or [unicycler](https://github.com/rrwick/Unicycler)
-- [x] consensus using [racon](https://github.com/isovic/racon)
-- [x] polishing using [nanopolish](https://github.com/jts/nanopolish)
+- adapter trimming using [porechop](https://github.com/rrwick/Porechop) version 0.2.3 ![Docker Build Status](https://img.shields.io/docker/build/hadrieng/porechop.svg?style=flat-square)
+- assembly using either:
+    - [miniasm](https://github.com/lh3/miniasm) version 0.2-r168 and minimap version 2.10-r768 ![Docker Build Status](https://img.shields.io/docker/build/hadrieng/miniasm.svg?style=flat-square)
+    - [canu](https://github.com/marbl/canu) ![Docker Build Status](https://img.shields.io/docker/build/hadrieng/canu.svg?style=flat-square)
+    - [unicycler](https://github.com/rrwick/Unicycler) ![Docker Build Status](https://img.shields.io/docker/build/hadrieng/unicycler.svg?style=flat-square)
+- consensus using [racon](https://github.com/isovic/racon) version 1.3.1 and minimap version 2.10-r768 ![Docker Build Status](https://img.shields.io/docker/build/hadrieng/racon.svg?style=flat-square)
+- polishing using [nanopolish](https://github.com/jts/nanopolish) ![Docker Build Status](https://img.shields.io/docker/build/hadrieng/nanopolish.svg?style=flat-square)
 
 ## Installation
 
