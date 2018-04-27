@@ -9,9 +9,9 @@
 Nanoflow aims at being a reproducible pipeline for bacterial genome assembly
 of nanopore reads.
 
-Nanoflow is a work in progress. At the moment it offers:
+Nanoflow uses the following software
 
-- [x] adapter trimming using [porechop](https://github.com/rrwick/Porechop)
+- adapter trimming using [porechop](https://github.com/rrwick/Porechop) version 0.2.3
 - [x] assembly using [miniasm](https://github.com/lh3/miniasm), [canu](https://github.com/marbl/canu) or [unicycler](https://github.com/rrwick/Unicycler)
 - [x] consensus using [racon](https://github.com/isovic/racon)
 - [x] polishing using [nanopolish](https://github.com/jts/nanopolish)
