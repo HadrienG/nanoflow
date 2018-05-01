@@ -12,7 +12,7 @@ install:
 
 script:
     - sudo bash test_unicycler.sh
-    # - sudo bash test_miniasm.sh
+    - sudo bash test_miniasm.sh
     # - sudo bash test_canu.sh
     # - sudo bash test_polishing.sh
 

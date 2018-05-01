@@ -9,12 +9,16 @@
 Nanoflow aims at being a reproducible pipeline for bacterial genome assembly
 of nanopore reads.
 
-Nanoflow is a work in progress. At the moment it offers:
+Nanoflow uses the following software
 
-- [x] adapter trimming using [porechop](https://github.com/rrwick/Porechop)
-- [x] assembly using [miniasm](https://github.com/lh3/miniasm), [canu](https://github.com/marbl/canu) or [unicycler](https://github.com/rrwick/Unicycler)
-- [x] consensus using [racon](https://github.com/isovic/racon)
-- [x] polishing using [nanopolish](https://github.com/jts/nanopolish)
+| Task | Software | Version | Docker | Lmod + SGE |
+| --- | --- | --- | --- | --- |
+| adapter trimming | [porechop](https://github.com/rrwick/Porechop) | 0.2.3 | ![Docker Build Status](https://img.shields.io/docker/build/hadrieng/porechop.svg?style=flat-square) | ✔️ |
+| assembly | [miniasm](https://github.com/lh3/miniasm) + [minimap2](https://github.com/lh3/minimap2) | 0.2-r168 / 2.10-r768 | ![Docker Build Status](https://img.shields.io/docker/build/hadrieng/miniasm.svg?style=flat-square) | ✔️ |
+| | [canu](https://github.com/marbl/canu) | Unknown | ![Docker Build Status](https://img.shields.io/docker/build/hadrieng/canu.svg?style=flat-square) | ✔️ |
+| | [unicycler](https://github.com/rrwick/Unicycler) | 0.4.5 | ![Docker Build Status](https://img.shields.io/docker/build/hadrieng/unicycler.svg?style=flat-square) | ✔️ |
+| consensus | [racon](https://github.com/isovic/racon) + [minimap2](https://github.com/lh3/minimap2) | 1.3.1 / 2.10-r768 |  ![Docker Build Status](https://img.shields.io/docker/build/hadrieng/racon.svg?style=flat-square) | ✔️ |
+| polishing | [nanopolish](https://github.com/jts/nanopolish) | Unknown | ![Docker Build Status](https://img.shields.io/docker/build/hadrieng/nanopolish.svg?style=flat-square) | ✔️ |
 
 ## Installation
 
