@@ -6,6 +6,8 @@
 
 ## Introduction
 
+:warning: **This repository is deprecated. Please use https://github.com/nf-core/bacass instead** :warning:
+
 Nanoflow aims at being a reproducible pipeline for bacterial genome assembly
 of nanopore reads.
 
